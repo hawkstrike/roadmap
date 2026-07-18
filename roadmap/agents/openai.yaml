@@ -1,0 +1,4 @@
+interface:
+  display_name: "Roadmap"
+  short_description: "Inspect or bootstrap self-contained project roadmaps"
+  default_prompt: "Use $roadmap to inspect this project's current roadmap or bootstrap an approved roadmap with self-contained session prompts."
