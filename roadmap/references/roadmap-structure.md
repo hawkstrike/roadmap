@@ -90,9 +90,11 @@ Record the selected format, state that it applies to completed-session and conti
 
 Include these fields for every session.
 
+Show every session status with both its emoji and text label. Use only `⏳ Pending`, `🔄 In progress`, `❌ Blocked`, or `✅ Complete`; do not replace the label with an emoji alone.
+
 | Field | Content |
 | --- | --- |
-| Status | Pending, in progress, blocked, or complete |
+| Status | `⏳ Pending`, `🔄 In progress`, `❌ Blocked`, or `✅ Complete` |
 | ID | A unique identifier that follows project conventions |
 | Track | A sequential or parallel workstream |
 | Goal | One user-facing or technical outcome |

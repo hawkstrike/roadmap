@@ -39,7 +39,7 @@ Keep the current session in progress or blocked when any of these remain.
 5. Canonical roadmap status, completion evidence, current and next sessions, and change history
 6. A copyable self-contained next-session or continuation prompt
 
-Update the roadmap before generating the prompt so the prompt references current state. Generate the next self-contained prompt in the format recorded by the roadmap. A completed session advances to the approved next session; an incomplete session keeps the same ID and produces a continuation prompt.
+Update the roadmap before generating the prompt so the prompt references current state. Preserve both the status emoji and text label defined by the roadmap structure whenever a session status changes. Generate the next self-contained prompt in the format recorded by the roadmap. A completed session advances to the approved next session; an incomplete session keeps the same ID and produces a continuation prompt.
 
 ## Required prompt content
 

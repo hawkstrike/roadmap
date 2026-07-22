@@ -123,7 +123,7 @@ The selected format applies to completed-session and continuation prompts until 
 
 A session prompt identifies the working path, applicable instructions, canonical roadmap, previous result, current goal, included and excluded scope, prerequisites, shared ownership, completion criteria, and required verification. It preserves user-owned changes and requires fresh evidence before completion.
 
-At closeout, the session reports implementation, verification, Git state, and risks; updates roadmap evidence, status, current and next sessions, and change history; then generates another self-contained prompt. Failed or missing verification produces a continuation prompt for the same session instead of advancing.
+At closeout, the session reports implementation, verification, Git state, and risks; updates roadmap evidence, status, current and next sessions, and change history; then generates another self-contained prompt. Session statuses always show an emoji and text label together: `✅ Complete`, `🔄 In progress`, `⏳ Pending`, or `❌ Blocked`. Failed or missing verification produces a continuation prompt for the same session instead of advancing.
 
 Parallel prompts declare separate file, data, external-resource, and roadmap-update ownership. One owner or a convergence session updates shared parent-roadmap state.
 
