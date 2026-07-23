@@ -1,0 +1,17 @@
+{
+  "name": "roadmap",
+  "version": "1.0.0",
+  "displayName": "Roadmap",
+  "description": "Inspect, create, and maintain implementation roadmaps with independently verifiable work sessions.",
+  "author": {
+    "name": "hawkstrike"
+  },
+  "homepage": "https://github.com/hawkstrike/roadmap",
+  "repository": "https://github.com/hawkstrike/roadmap",
+  "keywords": [
+    "roadmap",
+    "planning",
+    "workflow"
+  ],
+  "skills": "./roadmap/"
+}

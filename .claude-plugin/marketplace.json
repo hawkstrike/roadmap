@@ -1,0 +1,21 @@
+{
+  "name": "roadmap",
+  "owner": {
+    "name": "hawkstrike"
+  },
+  "metadata": {
+    "description": "Roadmap plugin marketplace"
+  },
+  "plugins": [
+    {
+      "name": "roadmap",
+      "version": "1.0.0",
+      "description": "Inspect, create, and maintain implementation roadmaps with independently verifiable work sessions.",
+      "author": {
+        "name": "hawkstrike"
+      },
+      "homepage": "https://github.com/hawkstrike/roadmap",
+      "source": "./"
+    }
+  ]
+}

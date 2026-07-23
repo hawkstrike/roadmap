@@ -21,90 +21,40 @@
 
 ## 설치
 
-### 준비 사항
+사용하는 도구에만 각각 설치하면 됩니다. Claude Code와 Codex를 모두 설치할 필요는 없습니다. 설치가 끝나면 새 세션을 시작해 스킬을 불러와 주세요.
 
-- 디렉터리 링크 설치에는 Git
-- 현재 `skills` CLI에는 Node.js 22.20 이상
-- Codex, Claude Code, OpenClaw 또는 다른 Agent Skills 호환 에이전트
+### 권장: `/plugin`으로 설치하기
 
-설치 방법 하나를 선택해 일관되게 사용하세요. 설치한 스킬을 에이전트가 인식할 수 있도록 새 세션을 시작해 주세요.
+#### Codex
 
-### 방법 1: Git 저장소 복제와 디렉터리 링크
+1. Codex에서 `/plugin`을 입력합니다.
+2. 마켓플레이스 관리 화면에서 GitHub 저장소 `hawkstrike/roadmap`을 추가합니다.
+3. 추가된 `roadmap` 마켓플레이스에서 **Roadmap** 플러그인을 선택해 설치합니다.
+4. 새 Codex 세션에서 `$roadmap`으로 호출합니다.
 
-이 방법은 로컬 저장소 하나를 단일 기준 원본으로 사용합니다. 이 저장소를 갱신하면 링크된 모든 도구의 설치본도 즉시 갱신됩니다.
+#### Claude Code
 
-대상 경로에 기존 설치본이 있으면 아래 명령은 중단됩니다. 전환하기 전에 기존 복사본을 백업하고 제거하세요. 두 스킬 경로를 모두 탐색하는 도구가 잘못된 복사본을 표시하거나 선택할 수 있으므로 `roadmap`이라는 같은 이름의 설치본을 두 곳에 남겨 두지 마세요.
+Claude Code에서 다음 명령을 순서대로 입력합니다.
 
-#### macOS와 Linux
-
-저장소를 안정적인 사용자 경로에 복제하고 지원되는 도구의 스킬 경로에 링크합니다.
-
-```bash
-roadmap_repository="${XDG_DATA_HOME:-$HOME/.local/share}/roadmap"
-mkdir -p "$(dirname "$roadmap_repository")"
-git clone https://github.com/hawkstrike/roadmap.git "$roadmap_repository"
-mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills"
-ln -s "$roadmap_repository/roadmap" "$HOME/.agents/skills/roadmap"
-ln -s "$roadmap_repository/roadmap" "$HOME/.claude/skills/roadmap"
+```text
+/plugin marketplace add hawkstrike/roadmap
+/plugin install roadmap@roadmap
 ```
 
-fast-forward가 가능한 경우에만 링크된 모든 설치본을 갱신합니다.
+설치 후 새 Claude Code 세션에서 `/roadmap`으로 호출합니다.
 
-```bash
-roadmap_repository="${XDG_DATA_HOME:-$HOME/.local/share}/roadmap"
-git -C "$roadmap_repository" pull --ff-only
-```
-
-#### Windows PowerShell
-
-저장소를 안정적인 사용자 경로에 복제하고 로컬 디렉터리 정션을 생성합니다. 두 경로가 로컬 드라이브에 있으면 Windows 개발자 모드나 관리자 권한으로 실행한 셸이 없어도 정션을 만들 수 있습니다.
-
-```powershell
-$roadmapRepository = Join-Path $HOME 'AppData\Local\roadmap'
-$roadmapSource = Join-Path $roadmapRepository 'roadmap'
-$codexSkills = Join-Path $HOME '.agents\skills'
-$claudeSkills = Join-Path $HOME '.claude\skills'
-
-git clone https://github.com/hawkstrike/roadmap.git $roadmapRepository
-New-Item -ItemType Directory -Force -Path $codexSkills, $claudeSkills | Out-Null
-New-Item -ItemType Junction -Path (Join-Path $codexSkills 'roadmap') -Target $roadmapSource
-New-Item -ItemType Junction -Path (Join-Path $claudeSkills 'roadmap') -Target $roadmapSource
-```
-
-PowerShell에서 링크된 모든 설치본을 갱신합니다.
-
-```powershell
-$roadmapRepository = Join-Path $HOME 'AppData\Local\roadmap'
-git -C $roadmapRepository pull --ff-only
-```
-
-공용 사용자 경로는 다음과 같습니다.
-
-| 도구 | 설치 경로 | 최초 호출 방법 |
-| --- | --- | --- |
-| Codex | `~/.agents/skills/roadmap` | `$roadmap` 또는 스킬 선택기 |
-| Claude Code | `~/.claude/skills/roadmap` | `/roadmap` |
-| OpenClaw | `~/.agents/skills/roadmap` | `/roadmap` |
-
-OpenClaw는 개인 에이전트 스킬 경로인 Codex 설치 경로를 직접 탐색하므로 `~/.openclaw/skills` 아래에 중복으로 복사할 필요가 없습니다. OpenClaw의 탐색 우선순위, 공개 범위 제어, 추가 설치 범위는 [OpenClaw 스킬 문서](https://docs.openclaw.ai/tools/skills)에서 확인할 수 있습니다.
-
-### 방법 2: GitHub와 `npx skills`
+### 대안: GitHub와 `npx skills`
 
 명령 이름은 `npx skills`처럼 `skills`가 복수형입니다. CLI는 이 GitHub 저장소를 직접 읽고 원본 정보와 스킬 폴더 해시를 기록하므로 나중에 설치본을 갱신할 수 있습니다. 지원되는 Node.js 버전이 있으면 macOS, Windows, Linux에서 동일하게 사용할 수 있습니다.
 
-현재 프로젝트에 Codex용 스킬을 설치합니다.
+Node.js 22.20 이상이 필요합니다. 사용하는 도구에 해당하는 명령 하나만 실행하세요.
 
 ```bash
-npx skills add hawkstrike/roadmap --skill roadmap --agent codex
+npx skills add hawkstrike/roadmap --skill roadmap --global --agent codex
+npx skills add hawkstrike/roadmap --skill roadmap --global --agent claude-code
 ```
 
-Codex와 Claude Code에서 사용할 전역 스킬로 설치합니다.
-
-```bash
-npx skills add hawkstrike/roadmap --skill roadmap --global --agent codex --agent claude-code
-```
-
-설치 방식을 묻는 메시지가 나오면 하나의 CLI 관리 원본을 유지할 수 있도록 권장 항목인 심볼릭 링크를 선택하세요. CLI는 Windows에서는 디렉터리 정션을 사용하고 링크 생성에 실패하면 복사 방식으로 전환합니다. 독립된 복사본이 명시적으로 필요할 때는 `--copy`를 사용하세요.
+설치 방식을 묻는 메시지가 나오면 권장 항목을 선택하세요.
 
 프로젝트 설치본은 해당 프로젝트 경로에서 갱신하고, 전역 설치본은 어느 경로에서나 갱신할 수 있습니다.
 
@@ -113,24 +63,7 @@ npx skills update roadmap --project
 npx skills update roadmap --global
 ```
 
-`skills` CLI는 자체 설치 경로와 잠금 파일을 관리합니다. 같은 도구와 범위에 이 방법과 위의 수동 Git 링크 방식을 함께 사용하지 마세요.
-
-### 대안: Bash 복사 설치기
-
-macOS 또는 Linux에서 복사 방식으로 설치하려면 저장소를 복제한 뒤 포함된 Bash 설치기를 실행합니다.
-
-```bash
-git clone https://github.com/hawkstrike/roadmap.git
-cd roadmap
-bash roadmap/scripts/install.sh
-```
-
-설치 스크립트를 다시 실행하면 기존 스킬을 업데이트할 수 있습니다. 두 설치 경로를 확인한 뒤 교체하며, 기존 디렉터리가 `roadmap` 스킬이라고 판단할 수 없으면 덮어쓰지 않고 중단합니다. 어느 한쪽이라도 업데이트하지 못하면 두 경로를 모두 이전 상태로 복구합니다.
-
-```bash
-git pull --ff-only
-bash roadmap/scripts/install.sh
-```
+`skills` CLI는 자체 설치 경로와 잠금 파일을 관리합니다. 같은 도구와 범위에 `/plugin` 설치와 `npx skills` 설치를 함께 사용하지 마세요.
 
 ### 다른 호환 에이전트에 설치하기
 
@@ -204,6 +137,13 @@ $roadmap 이 저장소를 확인하고 팀 기반 접근 제어 기능을 위한
 ## 프로젝트 구조
 
 ```text
+.agents/plugins/
+└── marketplace.json
+.claude-plugin/
+├── marketplace.json
+└── plugin.json
+.codex-plugin/
+└── plugin.json
 roadmap/
 ├── SKILL.md
 ├── agents/
@@ -215,11 +155,14 @@ roadmap/
     └── install.sh
 ```
 
+- `.agents/plugins/marketplace.json`은 Codex에 저장소의 플러그인 목록을 제공합니다.
+- `.claude-plugin/marketplace.json`은 Claude Code에 저장소의 플러그인 목록을 제공합니다.
+- Claude Code와 Codex의 `plugin.json`은 플러그인 메타데이터와 `roadmap/` 스킬 경로를 정의합니다.
 - `SKILL.md`는 발견 질문, 승인, 최초 구성 절차를 정의합니다.
 - `references/roadmap-structure.md`는 지속적인 로드맵 규율, 세션 크기, 순서, 병행 소유권을 정의합니다.
 - `references/session-closeout.md`는 완료 판정과 상세형·축약형 자립형 프롬프트 형식을 정의합니다.
 - `agents/openai.yaml`은 Codex 전용 표시 정보를 제공합니다.
-- `scripts/install.sh`는 Codex, Claude Code, OpenClaw가 사용하는 공용 경로에 스킬을 안전하게 설치하거나 업데이트합니다.
+- `scripts/install.sh`는 기존 복사 설치 사용자를 위한 설치·업데이트 스크립트입니다.
 
 ## 개발 및 검증
 

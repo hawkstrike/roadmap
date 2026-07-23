@@ -14,7 +14,7 @@ assert_contains() {
   local file="$1"
   local expected="$2"
 
-  if ! grep -Fq "$expected" "$file"; then
+  if ! grep -Fq -- "$expected" "$file"; then
     echo "Expected $file to contain: $expected" >&2
 
     return 1
@@ -25,7 +25,7 @@ assert_not_contains() {
   local file="$1"
   local unexpected="$2"
 
-  if grep -Fq "$unexpected" "$file"; then
+  if grep -Fq -- "$unexpected" "$file"; then
     echo "Expected $file not to contain: $unexpected" >&2
 
     return 1
@@ -54,7 +54,7 @@ assert_section_contains() {
     }
   ' "$file")"
 
-  if ! grep -Fq "$expected" <<< "$section"; then
+  if ! grep -Fq -- "$expected" <<< "$section"; then
     echo "Expected $file section $heading to contain: $expected" >&2
 
     return 1
@@ -101,7 +101,8 @@ assert_section_contains "$closeout_reference" '## Compact continuation prompt' '
 assert_contains "$english_readme" 'Detailed or compact'
 assert_contains "$english_readme" 'do not need to invoke the skill again'
 assert_contains "$english_readme" 'OpenClaw'
-assert_contains "$english_readme" '~/.agents/skills/roadmap'
+assert_contains "$english_readme" '### Recommended: install with `/plugin`'
+assert_contains "$english_readme" 'You do not need both Claude Code and Codex.'
 assert_contains "$english_readme" '/roadmap'
 assert_contains "$english_readme" 'Agent Skills-compatible'
 assert_contains "$english_readme" 'read-only inspection'
@@ -111,7 +112,8 @@ assert_contains "$english_readme" 'CODEX_HOME'
 assert_contains "$korean_readme" '상세형 또는 축약형'
 assert_contains "$korean_readme" '스킬을 다시 호출할 필요가 없습니다'
 assert_contains "$korean_readme" 'OpenClaw'
-assert_contains "$korean_readme" '~/.agents/skills/roadmap'
+assert_contains "$korean_readme" '### 권장: `/plugin`으로 설치하기'
+assert_contains "$korean_readme" 'Claude Code와 Codex를 모두 설치할 필요는 없습니다.'
 assert_contains "$korean_readme" '/roadmap'
 assert_contains "$korean_readme" 'Agent Skills 호환'
 assert_contains "$korean_readme" '읽기 전용 점검'

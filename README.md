@@ -21,90 +21,40 @@ Invoke the skill for a read-only inspection or when creating or materially revis
 
 ## Installation
 
-### Prerequisites
+Install only the client or clients you use. You do not need both Claude Code and Codex. Start a new client session after installation so it can discover the skill.
 
-- Git for a linked installation
-- Node.js 22.20 or later for the current `skills` CLI
-- Codex, Claude Code, OpenClaw, or another Agent Skills-compatible agent
+### Recommended: install with `/plugin`
 
-Choose one installation method and use it consistently. Start a new client session after installation so the agent can discover the skill.
+#### Codex
 
-### Option 1: Git clone with directory links
+1. Enter `/plugin` in Codex.
+2. From marketplace management, add the GitHub repository `hawkstrike/roadmap`.
+3. Select and install the **Roadmap** plugin from the new `roadmap` marketplace.
+4. Start a new Codex session and invoke it with `$roadmap`.
 
-This method keeps a local clone as the single source of truth. Updating that clone immediately updates every linked client installation.
+#### Claude Code
 
-The commands stop if an installation already exists at a target path. Back up and remove an existing copy before migrating. Do not keep two installations named `roadmap` in different user skill roots because clients that scan both roots may show or select the wrong copy.
+Enter these commands in Claude Code:
 
-#### macOS and Linux
-
-Clone the repository into a stable user-level location and link the skill into the supported client roots:
-
-```bash
-roadmap_repository="${XDG_DATA_HOME:-$HOME/.local/share}/roadmap"
-mkdir -p "$(dirname "$roadmap_repository")"
-git clone https://github.com/hawkstrike/roadmap.git "$roadmap_repository"
-mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills"
-ln -s "$roadmap_repository/roadmap" "$HOME/.agents/skills/roadmap"
-ln -s "$roadmap_repository/roadmap" "$HOME/.claude/skills/roadmap"
+```text
+/plugin marketplace add hawkstrike/roadmap
+/plugin install roadmap@roadmap
 ```
 
-Update all linked installations with a fast-forward-only pull:
+Start a new Claude Code session and invoke it with `/roadmap`.
 
-```bash
-roadmap_repository="${XDG_DATA_HOME:-$HOME/.local/share}/roadmap"
-git -C "$roadmap_repository" pull --ff-only
-```
-
-#### Windows PowerShell
-
-Clone the repository into a stable user-level location and create local directory junctions. Junctions do not require Windows Developer Mode or an elevated shell when both paths are on local drives.
-
-```powershell
-$roadmapRepository = Join-Path $HOME 'AppData\Local\roadmap'
-$roadmapSource = Join-Path $roadmapRepository 'roadmap'
-$codexSkills = Join-Path $HOME '.agents\skills'
-$claudeSkills = Join-Path $HOME '.claude\skills'
-
-git clone https://github.com/hawkstrike/roadmap.git $roadmapRepository
-New-Item -ItemType Directory -Force -Path $codexSkills, $claudeSkills | Out-Null
-New-Item -ItemType Junction -Path (Join-Path $codexSkills 'roadmap') -Target $roadmapSource
-New-Item -ItemType Junction -Path (Join-Path $claudeSkills 'roadmap') -Target $roadmapSource
-```
-
-Update all linked installations from PowerShell:
-
-```powershell
-$roadmapRepository = Join-Path $HOME 'AppData\Local\roadmap'
-git -C $roadmapRepository pull --ff-only
-```
-
-The shared user paths are:
-
-| Client | Installation path | Initial invocation |
-| --- | --- | --- |
-| Codex | `~/.agents/skills/roadmap` | `$roadmap` or the skill picker |
-| Claude Code | `~/.claude/skills/roadmap` | `/roadmap` |
-| OpenClaw | `~/.agents/skills/roadmap` | `/roadmap` |
-
-OpenClaw discovers the Codex installation through its supported personal-agent skill root, so it does not need a duplicate copy under `~/.openclaw/skills`. See the [OpenClaw skills documentation](https://docs.openclaw.ai/tools/skills) for its loading order, visibility controls, and additional installation scopes.
-
-### Option 2: GitHub with `npx skills`
+### Alternative: GitHub with `npx skills`
 
 The command is `npx skills`, with `skills` in the plural. The CLI reads this GitHub repository directly, records its source and skill-folder hash, and can update the installation later. It works on macOS, Windows, and Linux wherever its supported Node.js version is available.
 
-Install the skill for Codex in the current project:
+Node.js 22.20 or later is required. Run only the command for the client you use:
 
 ```bash
-npx skills add hawkstrike/roadmap --skill roadmap --agent codex
+npx skills add hawkstrike/roadmap --skill roadmap --global --agent codex
+npx skills add hawkstrike/roadmap --skill roadmap --global --agent claude-code
 ```
 
-Install it globally for both Codex and Claude Code:
-
-```bash
-npx skills add hawkstrike/roadmap --skill roadmap --global --agent codex --agent claude-code
-```
-
-When prompted for an installation method, choose the recommended symlink option to keep one CLI-managed canonical copy. The CLI uses a directory junction on Windows and falls back to copying if link creation fails. Use `--copy` when you explicitly need independent copies.
+When prompted for an installation method, choose the recommended option.
 
 Update a project installation from that project directory, or update a global installation from any directory:
 
@@ -113,24 +63,7 @@ npx skills update roadmap --project
 npx skills update roadmap --global
 ```
 
-The `skills` CLI manages its own destination paths and lock files. Do not combine this method with the manual Git links above for the same client and scope.
-
-### Alternative: Bash copy installer
-
-For a copy-based installation on macOS or Linux, clone the repository and run the bundled Bash installer:
-
-```bash
-git clone https://github.com/hawkstrike/roadmap.git
-cd roadmap
-bash roadmap/scripts/install.sh
-```
-
-The installer can be run again to update an existing installation. It validates both destinations before replacing them and refuses to overwrite a directory that is not identifiable as the `roadmap` skill. If either installation cannot be updated, it restores the previous state of both destinations.
-
-```bash
-git pull --ff-only
-bash roadmap/scripts/install.sh
-```
+The `skills` CLI manages its own destination paths and lock files. Do not combine this method with a `/plugin` installation for the same client and scope.
 
 ### Install for another compatible agent
 
@@ -204,6 +137,13 @@ Parallel prompts declare separate file, data, external-resource, and roadmap-upd
 ## Project structure
 
 ```text
+.agents/plugins/
+└── marketplace.json
+.claude-plugin/
+├── marketplace.json
+└── plugin.json
+.codex-plugin/
+└── plugin.json
 roadmap/
 ├── SKILL.md
 ├── agents/
@@ -215,11 +155,14 @@ roadmap/
     └── install.sh
 ```
 
+- `.agents/plugins/marketplace.json` exposes the repository's plugin catalog to Codex.
+- `.claude-plugin/marketplace.json` exposes the repository's plugin catalog to Claude Code.
+- The Claude Code and Codex `plugin.json` files define plugin metadata and point to the `roadmap/` skill.
 - `SKILL.md` defines discovery, approval, and bootstrap workflow.
 - `references/roadmap-structure.md` defines durable roadmap rules, session sizing, sequencing, and parallel ownership.
 - `references/session-closeout.md` defines completion decisions plus Detailed and compact self-contained prompt templates.
 - `agents/openai.yaml` provides Codex-specific display metadata.
-- `scripts/install.sh` safely installs or updates the shared paths used by Codex, Claude Code, and OpenClaw.
+- `scripts/install.sh` remains available to existing copy-installer users.
 
 ## Development and verification
 
