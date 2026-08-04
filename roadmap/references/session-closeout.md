@@ -14,7 +14,7 @@
 
 ## Prompt independence
 
-Generate prompts that can start in a new conversation without previous conversation history or another invocation of this skill. Every prompt must point to the canonical roadmap, carry the current session's exact scope and evidence requirements, and require another self-contained prompt at closeout.
+Generate prompts that can start in a new conversation without previous conversation history or another invocation of this skill. This independence must not disable other relevant skills available in the current environment. Every prompt must point to the canonical roadmap, carry the current session's exact scope and evidence requirements, and require another self-contained prompt at closeout.
 
 Replace every brace-delimited slot with a real value. Never emit unresolved placeholders.
 
@@ -43,14 +43,14 @@ Update the roadmap before generating the prompt so the prompt references current
 
 ## Required prompt content
 
-Every format must include the working path; applicable instruction discovery; exact canonical roadmap and relevant guide paths; previous result; current session ID and goal; included and excluded scope; prerequisites and shared boundaries; completion criteria; planned verification; preservation of user-owned changes; completion decision; closeout order; roadmap update responsibility; and a requirement to generate the following self-contained prompt.
+Every format must include the working path; applicable instruction and relevant-skill discovery; exact canonical roadmap and relevant guide paths; previous result; current session ID and goal; included and excluded scope; prerequisites and shared boundaries; completion criteria; planned verification; preservation of user-owned changes; completion decision; closeout order; roadmap update responsibility; and a requirement to generate the following self-contained prompt.
 
 ## Detailed completed-session prompt
 
 ```text
 Work in {working path}.
 
-Read every applicable agent instruction file recognized by the current runtime from the working path through the repository root, including AGENTS.md and CLAUDE.md when present. Use available user instructions and project memory as context, but verify changeable claims against current files and Git. Read {canonical roadmap} and {relevant guides}.
+Read every applicable agent instruction file recognized by the current runtime from the working path through the repository root, including AGENTS.md and CLAUDE.md when present. Use available user instructions and project memory as context, but verify changeable claims against current files and Git. Use relevant skills available in the current environment when they apply to this session. Read {canonical roadmap} and {relevant guides}.
 
 The previous session completed {completed session and outcome}. Work only on {next session ID and title}.
 
@@ -66,7 +66,7 @@ Before editing, read the relevant implementation, tests, configuration, and simi
 
 At closeout, update the canonical roadmap's completion evidence, current and next sessions, and change history. If every completion criterion passes, mark this session complete and advance to the approved next session. Otherwise keep this session open. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
 
-Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another skill invocation.
+Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another invocation of the roadmap skill.
 ```
 
 ## Detailed continuation prompt
@@ -74,7 +74,7 @@ Generate the next self-contained prompt after updating the roadmap. Use the road
 ```text
 Work in {working path}.
 
-Read every applicable agent instruction file recognized by the current runtime from the working path through the repository root, including AGENTS.md and CLAUDE.md when present. Use available user instructions and project memory as context, but verify changeable claims against current files and Git. Read {canonical roadmap} and {relevant guides}.
+Read every applicable agent instruction file recognized by the current runtime from the working path through the repository root, including AGENTS.md and CLAUDE.md when present. Use available user instructions and project memory as context, but verify changeable claims against current files and Git. Use relevant skills available in the current environment when they apply to this session. Read {canonical roadmap} and {relevant guides}.
 
 Continue {current session ID and title}. The session remains incomplete because {failure or blocking evidence}.
 
@@ -93,13 +93,13 @@ Before editing, read the relevant implementation, tests, configuration, and simi
 
 At closeout, update the canonical roadmap's completion evidence, current and next sessions, and change history. Advance only if every remaining completion criterion passes; otherwise keep the same session ID. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
 
-Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another skill invocation.
+Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another invocation of the roadmap skill.
 ```
 
 ## Compact completed-session prompt
 
 ```text
-Work in {working path}. Read every applicable agent instruction file recognized by the current runtime, including AGENTS.md and CLAUDE.md when present, then read the shared execution rules, prompt policy, and current state in {canonical roadmap}. Verify changeable memory or handoff claims against current files and Git. Also inspect {relevant guides}.
+Work in {working path}. Read every applicable agent instruction file recognized by the current runtime, including AGENTS.md and CLAUDE.md when present, then read the shared execution rules, prompt policy, and current state in {canonical roadmap}. Verify changeable memory or handoff claims against current files and Git. Use relevant skills available in the current environment when they apply to this session. Also inspect {relevant guides}.
 
 The previous session completed {completed session and outcome}. Work only on {next session ID and title}.
 
@@ -116,7 +116,7 @@ Preserve user-owned changes. Mark the session complete only with fresh evidence 
 ## Compact continuation prompt
 
 ```text
-Work in {working path}. Read every applicable agent instruction file recognized by the current runtime, including AGENTS.md and CLAUDE.md when present, then read the shared execution rules, prompt policy, and current state in {canonical roadmap}. Verify changeable memory or handoff claims against current files and Git. Also inspect {relevant guides}.
+Work in {working path}. Read every applicable agent instruction file recognized by the current runtime, including AGENTS.md and CLAUDE.md when present, then read the shared execution rules, prompt policy, and current state in {canonical roadmap}. Verify changeable memory or handoff claims against current files and Git. Use relevant skills available in the current environment when they apply to this session. Also inspect {relevant guides}.
 
 Continue {current session ID and title}. It remains incomplete because {failure or blocking evidence}.
 

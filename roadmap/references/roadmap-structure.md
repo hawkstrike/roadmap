@@ -60,7 +60,7 @@ Explain material alternatives and obtain user approval before locking the sequen
 
 ## Shared execution rules
 
-Write durable rules in the canonical roadmap so later prompts can work without this skill or unrelated global skills.
+Write durable rules in the canonical roadmap so later prompts do not require this skill again. They must continue to use relevant skills available in the current environment when those skills apply.
 
 - Read relevant implementation, tests, configuration, and similar existing patterns before changing files.
 - State assumptions and material tradeoffs before making hard-to-reverse choices.
