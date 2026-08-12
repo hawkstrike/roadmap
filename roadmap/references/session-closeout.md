@@ -36,14 +36,14 @@ Keep the current session in progress or blocked when any of these remain.
 2. Verification performed and its results
 3. Commit information or current Git state
 4. Remaining risks and anything not verified
-5. Canonical roadmap status, completion evidence, current and next sessions, and change history
+5. Canonical roadmap status, completion evidence, current and next sessions, archive index links, and change history only when the plan itself changed
 6. A copyable self-contained next-session or continuation prompt
 
-Update the roadmap before generating the prompt so the prompt references current state. Preserve both the status emoji and text label defined by the roadmap structure whenever a session status changes. Generate the next self-contained prompt in the format recorded by the roadmap. A completed session advances to the approved next session; an incomplete session keeps the same ID and produces a continuation prompt.
+Update the roadmap before generating the prompt so the prompt references current state. Preserve both the status emoji and text label defined by the roadmap structure whenever a session status changes. Apply the roadmap's archive policy when a completed phase or track is ready to move out of the active plan, and keep direct archive index links in the canonical roadmap. Update change history only when the plan itself changed; routine completion belongs in completion evidence and the archive. Generate the next self-contained prompt in the format recorded by the roadmap. A completed session advances to the approved next session; an incomplete session keeps the same ID and produces a continuation prompt.
 
 ## Required prompt content
 
-Every format must include the working path; applicable instruction and relevant-skill discovery; exact canonical roadmap and relevant guide paths; previous result; current session ID and goal; included and excluded scope; prerequisites and shared boundaries; completion criteria; planned verification; preservation of user-owned changes; completion decision; closeout order; roadmap update responsibility; and a requirement to generate the following self-contained prompt.
+Every format must include the working path; applicable instruction and relevant-skill discovery; exact canonical roadmap and relevant guide paths; previous result; current session ID and goal; included and excluded scope; prerequisites and shared boundaries; completion criteria; planned verification; preservation of user-owned changes; completion decision; closeout order; roadmap and archive update responsibility; and a requirement to generate the following self-contained prompt.
 
 ## Detailed completed-session prompt
 
@@ -64,7 +64,7 @@ Required verification: {planned verification}
 
 Before editing, read the relevant implementation, tests, configuration, and similar existing patterns. State material assumptions and tradeoffs. Make the smallest change that satisfies this session; avoid unrelated cleanup, speculative abstraction, and unrelated reformatting. Reproduce bugs before fixing them when practical, test behavior, investigate root causes, and add no dependency without a demonstrated need. Preserve user-owned changes and do not claim completion without fresh verification evidence.
 
-At closeout, update the canonical roadmap's completion evidence, current and next sessions, and change history. If every completion criterion passes, mark this session complete and advance to the approved next session. Otherwise keep this session open. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
+At closeout, update the canonical roadmap's completion evidence and current and next sessions. Apply its archive policy, preserve direct archive index links, and update change history only when the plan itself changed. If every completion criterion passes, mark this session complete and advance to the approved next session. Otherwise keep this session open. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
 
 Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another invocation of the roadmap skill.
 ```
@@ -91,7 +91,7 @@ Current Git and user-owned changes: {Git state and preservation requirements}
 
 Before editing, read the relevant implementation, tests, configuration, and similar existing patterns. State material assumptions and tradeoffs. Make the smallest change that completes this session; avoid unrelated cleanup, speculative abstraction, and unrelated reformatting. Reproduce failures, investigate root causes, test behavior, and add no dependency without a demonstrated need. Preserve user-owned changes and do not mark this session complete without fresh evidence for every remaining check.
 
-At closeout, update the canonical roadmap's completion evidence, current and next sessions, and change history. Advance only if every remaining completion criterion passes; otherwise keep the same session ID. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
+At closeout, update the canonical roadmap's completion evidence and current and next sessions. Apply its archive policy, preserve direct archive index links, and update change history only when the plan itself changed. Advance only if every remaining completion criterion passes; otherwise keep the same session ID. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
 
 Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another invocation of the roadmap skill.
 ```
@@ -110,7 +110,7 @@ Prerequisites and shared ownership: {prerequisites, shared boundaries, and roadm
 Completion requires: {completion criteria}
 Verify with: {planned verification}
 
-Preserve user-owned changes. Mark the session complete only with fresh evidence for every criterion; otherwise keep it open. Update the roadmap, then report implementation, verification, Git state, risks, and roadmap changes before generating the next self-contained prompt in the recorded format with the same execution, completion, closeout, and prompt-generation rules.
+Preserve user-owned changes. Mark the session complete only with fresh evidence for every criterion; otherwise keep it open. Update current state and completion evidence, apply the archive policy while preserving direct index links, and record change history only when the plan itself changed. Then report implementation, verification, Git state, risks, and roadmap changes before generating the next self-contained prompt in the recorded format with the same execution, completion, closeout, and prompt-generation rules.
 ```
 
 ## Compact continuation prompt
@@ -130,7 +130,7 @@ Completion requires: {remaining completion criteria}
 Verify with: {remaining planned verification}
 Git and user-owned changes: {Git state and preservation requirements}
 
-Preserve the same session ID until every criterion has fresh evidence. Update the roadmap, then report implementation, verification, Git state, risks, and roadmap changes before generating the next self-contained prompt in the recorded format with the same execution, completion, closeout, and prompt-generation rules.
+Preserve the same session ID until every criterion has fresh evidence. Update current state and completion evidence, apply the archive policy while preserving direct index links, and record change history only when the plan itself changed. Then report implementation, verification, Git state, risks, and roadmap changes before generating the next self-contained prompt in the recorded format with the same execution, completion, closeout, and prompt-generation rules.
 ```
 
 ## Parallel next sessions

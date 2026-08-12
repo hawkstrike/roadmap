@@ -4,6 +4,7 @@
 
 - [Adapt to an existing project](#adapt-to-an-existing-project)
 - [Default structure for a new roadmap](#default-structure-for-a-new-roadmap)
+- [Active roadmap and archives](#active-roadmap-and-archives)
 - [Discovery and sequencing approval](#discovery-and-sequencing-approval)
 - [Shared execution rules](#shared-execution-rules)
 - [Session prompt policy](#session-prompt-policy)
@@ -14,7 +15,7 @@
 ## Adapt to an existing project
 
 1. Prefer the canonical roadmap named by project instructions.
-2. When a parent index and child roadmaps exist, keep current position and links in the parent and detailed sessions in the children.
+2. When a parent index and child roadmaps exist, keep current position and direct links to every child and archive document in the parent, and keep detailed sessions in the children.
 3. When the canonical file cannot be identified, ask one question for the exact path.
 4. When no roadmap exists, propose `docs/roadmap.md` and create it only after approval.
 5. Preserve existing headings, status markers, session identifiers, and change-history conventions whenever possible.
@@ -38,10 +39,24 @@ Replace every brace-delimited slot with a real project value when using this str
 ## Phases and work tracks
 ## Session plan
 ## Current and next sessions
+## Completed work archives
 ## Change history
 ```
 
 Record which claims come from current code or verification, project instructions, documentation, Git history, or memory. Treat memory and historical handoffs as leads that require confirmation when the state can change.
+
+## Active roadmap and archives
+
+Keep the canonical roadmap authoritative for current state and usable as the navigation entry point for the whole plan. Keep active and pending work detailed there or in linked child roadmaps. Move older completed-session details into archive documents so routine session history does not dominate the active plan.
+
+- Keep a compact `Completed work archives` index in the canonical roadmap. The index must link directly to every archive document and state each archive's phase or track, session range, and primary outcome.
+- Group archived sessions by a coherent phase or track. Do not create one file per session unless a session needs a standalone incident report, decision record, or similarly durable artifact.
+- Give every archive document a link back to the canonical roadmap and an internal session index. Preserve each archived session's outcome, concise verification result, and commit, pull request, or other durable evidence reference.
+- Link directly to an archived session heading when active work depends on its result. Do not make later sessions search an entire archive for a prerequisite.
+- Keep exhaustive command output, file lists, and implementation detail in Git, continuous-integration artifacts, or dedicated reports. Record only the result and durable reference in the roadmap archive.
+- Archive only completed work. Keep in-progress, blocked, and immediately upcoming sessions in the active roadmap until their state changes.
+
+Change history records material changes to the plan, such as scope, priority, sequencing, dependencies, or architecture decisions. Routine session completion belongs in completion evidence and, when moved, the archive; do not repeat every closeout in change history.
 
 ## Discovery and sequencing approval
 

@@ -21,7 +21,7 @@ Inspect current evidence first. For creation or material revision, resolve only 
 8. Delegate design, implementation, testing, and verification methods to applicable project instructions and relevant skills available in the current environment. Self-contained session prompts must not disable those skills.
 9. After scope is clear, propose session sequencing based on dependencies, shared boundaries, uncertainty, user value, and integration needs. Explain material tradeoffs and obtain user approval before locking goals or priorities.
 10. If the canonical roadmap does not already record a prompt policy, ask the user to choose Detailed or compact prompts as one separate topic. Record the choice and keep it until the user explicitly changes it.
-11. Create or revise the canonical roadmap, lock the first session, and read [references/session-closeout.md](references/session-closeout.md) to generate the first self-contained prompt. Do not require later prompts to invoke this skill.
+11. Create or revise the canonical roadmap, keep its completed-work archive index navigable, lock the first session, and read [references/session-closeout.md](references/session-closeout.md) to generate the first self-contained prompt. Do not require later prompts to invoke this skill.
 
 ## Instruction precedence
 
@@ -49,4 +49,5 @@ Treat memory and historical handoffs as discovery leads rather than proof of cur
 | Letting the model silently choose priorities | Propose the order, explain tradeoffs, and obtain approval |
 | Listing parallel candidates without structure | Record ownership, shared changes, and convergence points |
 | Depending on this skill in every session | Put durable rules in the roadmap and generate self-contained prompts |
+| Keeping all completed-session detail in the active roadmap | Move coherent completed phases or tracks to linked archives and keep a compact archive index in the canonical roadmap |
 | Completing a failed session under schedule pressure | Preserve its status and generate a continuation prompt for the same session |

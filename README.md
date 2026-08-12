@@ -15,6 +15,7 @@ Invoke the skill for a read-only inspection or when creating or materially revis
 - Proposes dependency- and risk-aware session sequencing and obtains user approval before locking priorities.
 - Splits work into sessions with one primary outcome, explicit scope, prerequisites, shared boundaries, completion criteria, and verification.
 - Models safe parallel work with ownership boundaries, roadmap update responsibility, and convergence points.
+- Keeps the canonical roadmap as the navigation entry point, links directly to every archive document, and groups completed-session details by phase or track.
 - Lets the user choose Detailed or compact self-contained prompts and preserves that project-level policy.
 - Keeps incomplete work in the same session when required evidence is missing.
 - Applies concise read-first, minimal-change, test, debugging, dependency, and verification defaults when project instructions do not provide more specific rules.
@@ -110,7 +111,7 @@ Invoke the installed `roadmap` skill using the client's skill picker, slash comm
 3. Propose session sequencing and parallel tracks, explain material tradeoffs, and obtain approval.
 4. Ask the user to choose Detailed or compact prompts when the roadmap has no prompt policy.
 5. Create or revise the canonical roadmap and generate the first self-contained session prompt.
-6. Let each session update the roadmap and generate the following prompt.
+6. Let each session update current roadmap state, maintain linked completed-work archives, and generate the following prompt.
 
 The later prompts read the canonical roadmap and carry their own scope, verification, completion, closeout, and handoff rules. They do not need another skill invocation or previous conversation history.
 
@@ -130,7 +131,7 @@ The selected format applies to completed-session and continuation prompts until 
 
 A session prompt identifies the working path, applicable instructions, canonical roadmap, previous result, current goal, included and excluded scope, prerequisites, shared ownership, completion criteria, and required verification. It preserves user-owned changes and requires fresh evidence before completion.
 
-At closeout, the session reports implementation, verification, Git state, and risks; updates roadmap evidence, status, current and next sessions, and change history; then generates another self-contained prompt. Session statuses always show an emoji and text label together: `✅ Complete`, `🔄 In progress`, `⏳ Pending`, or `❌ Blocked`. Failed or missing verification produces a continuation prompt for the same session instead of advancing.
+At closeout, the session reports implementation, verification, Git state, and risks; updates roadmap evidence plus current and next sessions; then generates another self-contained prompt. The canonical roadmap keeps a compact index that links directly to every archive document, while completed-session details move into phase- or track-based archives with links back to the roadmap. Change history records material plan changes rather than routine session completion. Session statuses always show an emoji and text label together: `✅ Complete`, `🔄 In progress`, `⏳ Pending`, or `❌ Blocked`. Failed or missing verification produces a continuation prompt for the same session instead of advancing.
 
 Parallel prompts declare separate file, data, external-resource, and roadmap-update ownership. One owner or a convergence session updates shared parent-roadmap state.
 
