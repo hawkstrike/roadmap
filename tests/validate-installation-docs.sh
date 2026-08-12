@@ -5,6 +5,7 @@ set -euo pipefail
 repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 english_readme="$repository_root/README.md"
 korean_readme="$repository_root/README.ko.md"
+release_workflow="$repository_root/.github/workflows/release.yml"
 
 assert_contains() {
   local file="$1"
@@ -36,6 +37,9 @@ assert_contains "$english_readme" 'Install only the client or clients you use.'
 assert_contains "$english_readme" '### Alternative: GitHub with `npx skills`'
 assert_contains "$english_readme" 'npx skills add hawkstrike/roadmap --skill roadmap'
 assert_contains "$english_readme" 'npx skills update roadmap'
+assert_contains "$english_readme" 'codex plugin marketplace upgrade roadmap'
+assert_contains "$english_readme" '/plugin marketplace update roadmap'
+assert_contains "$english_readme" './scripts/set-version.sh patch'
 assert_contains "$english_readme" 'The command is `npx skills`'
 assert_contains "$english_readme" 'bash tests/validate-installation-docs.sh'
 assert_not_contains "$english_readme" '#### macOS and Linux'
@@ -50,11 +54,18 @@ assert_contains "$korean_readme" '사용하는 도구에만 각각 설치하면 
 assert_contains "$korean_readme" '### 대안: GitHub와 `npx skills`'
 assert_contains "$korean_readme" 'npx skills add hawkstrike/roadmap --skill roadmap'
 assert_contains "$korean_readme" 'npx skills update roadmap'
+assert_contains "$korean_readme" 'codex plugin marketplace upgrade roadmap'
+assert_contains "$korean_readme" '/plugin marketplace update roadmap'
+assert_contains "$korean_readme" './scripts/set-version.sh patch'
 assert_contains "$korean_readme" '명령 이름은 `npx skills`'
 assert_contains "$korean_readme" 'bash tests/validate-installation-docs.sh'
 assert_not_contains "$korean_readme" '#### macOS와 Linux'
 assert_not_contains "$korean_readme" '#### Windows PowerShell'
 assert_not_contains "$korean_readme" '--agent codex --agent claude-code'
+
+assert_contains "$release_workflow" './scripts/set-version.sh --check-tag "$GITHUB_REF_NAME"'
+assert_contains "$release_workflow" 'bash tests/version-management.sh'
+assert_contains "$release_workflow" 'gh release create "$GITHUB_REF_NAME"'
 
 python3 - "$repository_root" <<'PYTHON'
 import json
@@ -62,6 +73,7 @@ import pathlib
 import sys
 
 repository_root = pathlib.Path(sys.argv[1])
+expected_version = (repository_root / 'VERSION').read_text().strip()
 
 for manifest_path in (
     repository_root / '.codex-plugin/plugin.json',
@@ -69,7 +81,7 @@ for manifest_path in (
 ):
     manifest = json.loads(manifest_path.read_text())
     assert manifest['name'] == 'roadmap'
-    assert manifest['version'] == '1.0.0'
+    assert manifest['version'] == expected_version
     assert manifest['skills'] == './roadmap/'
 
 codex_marketplace = json.loads(
@@ -85,6 +97,7 @@ claude_marketplace = json.loads(
 assert claude_marketplace['name'] == 'roadmap'
 assert claude_marketplace['plugins'][0]['name'] == 'roadmap'
 assert claude_marketplace['plugins'][0]['source'] == './'
+assert claude_marketplace['plugins'][0]['version'] == expected_version
 PYTHON
 
 echo 'installation documentation tests passed'

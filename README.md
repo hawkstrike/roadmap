@@ -33,6 +33,12 @@ Install only the client or clients you use. You do not need both Claude Code and
 3. Select and install the **Roadmap** plugin from the new `roadmap` marketplace.
 4. Start a new Codex session and invoke it with `$roadmap`.
 
+To update an existing installation, refresh the marketplace snapshot, restart the ChatGPT desktop app, and update **Roadmap** from the Installed section of the Plugins Directory:
+
+```bash
+codex plugin marketplace upgrade roadmap
+```
+
 #### Claude Code
 
 Enter these commands in Claude Code:
@@ -43,6 +49,13 @@ Enter these commands in Claude Code:
 ```
 
 Start a new Claude Code session and invoke it with `/roadmap`.
+
+Third-party marketplace auto-update is disabled by default. Enable auto-update for the `roadmap` marketplace in `/plugin` or refresh it manually, then run `/reload-plugins` when Claude Code reports that the update is ready:
+
+```text
+/plugin marketplace update roadmap
+/reload-plugins
+```
 
 ### Alternative: GitHub with `npx skills`
 
@@ -65,6 +78,25 @@ npx skills update roadmap --global
 ```
 
 The `skills` CLI manages its own destination paths and lock files. Do not combine this method with a `/plugin` installation for the same client and scope.
+
+## Versioning and release
+
+`VERSION` is the canonical plugin version. Do not edit manifest versions directly. Choose the semantic version increment that matches the change; the command updates the Claude marketplace manifest and both plugin manifests together:
+
+```bash
+./scripts/set-version.sh patch
+./scripts/set-version.sh minor
+./scripts/set-version.sh major
+```
+
+An explicit stable semantic version such as `./scripts/set-version.sh 2.0.0` is also accepted. Run the development checks, commit the version change with the related skill changes, then tag that exact commit and push the branch and tag:
+
+```bash
+git tag "v$(cat VERSION)"
+git push origin main "v$(cat VERSION)"
+```
+
+The release workflow rejects a tag that does not match `VERSION`, reruns the regression tests, and creates the GitHub release. Installed plugin clients can then detect the bumped manifest version through their marketplace update flow.
 
 ### Install for another compatible agent
 
@@ -138,6 +170,8 @@ Parallel prompts declare separate file, data, external-resource, and roadmap-upd
 ## Project structure
 
 ```text
+.github/workflows/
+└── release.yml
 .agents/plugins/
 └── marketplace.json
 .claude-plugin/
@@ -145,6 +179,8 @@ Parallel prompts declare separate file, data, external-resource, and roadmap-upd
 └── plugin.json
 .codex-plugin/
 └── plugin.json
+scripts/
+└── set-version.sh
 roadmap/
 ├── SKILL.md
 ├── agents/
@@ -154,8 +190,10 @@ roadmap/
 │   └── session-closeout.md
 └── scripts/
     └── install.sh
+VERSION
 ```
 
+- `.github/workflows/release.yml` validates version tags, runs regression tests, and creates GitHub releases.
 - `.agents/plugins/marketplace.json` exposes the repository's plugin catalog to Codex.
 - `.claude-plugin/marketplace.json` exposes the repository's plugin catalog to Claude Code.
 - The Claude Code and Codex `plugin.json` files define plugin metadata and point to the `roadmap/` skill.
@@ -163,7 +201,8 @@ roadmap/
 - `references/roadmap-structure.md` defines durable roadmap rules, session sizing, sequencing, and parallel ownership.
 - `references/session-closeout.md` defines completion decisions plus Detailed and compact self-contained prompt templates.
 - `agents/openai.yaml` provides Codex-specific display metadata.
-- `scripts/install.sh` remains available to existing copy-installer users.
+- `roadmap/scripts/install.sh` remains available to existing copy-installer users.
+- The root `VERSION` file and `scripts/set-version.sh` keep all release metadata synchronized.
 
 ## Development and verification
 
@@ -173,7 +212,9 @@ Run the portable installation and content regression tests plus structural check
 bash tests/install-roadmap-skill.sh
 bash tests/validate-installation-docs.sh
 bash tests/validate-roadmap-content.sh
+bash tests/version-management.sh
 bash -n roadmap/scripts/install.sh
+bash -n scripts/set-version.sh
 git diff --check
 ```
 

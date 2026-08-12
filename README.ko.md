@@ -33,6 +33,12 @@
 3. 추가된 `roadmap` 마켓플레이스에서 **Roadmap** 플러그인을 선택해 설치합니다.
 4. 새 Codex 세션에서 `$roadmap`으로 호출합니다.
 
+기존 설치본을 갱신하려면 마켓플레이스 스냅샷을 새로 받은 뒤 ChatGPT 데스크톱 앱을 재시작하고, 플러그인 디렉터리의 설치됨 영역에서 **Roadmap**을 업데이트합니다.
+
+```bash
+codex plugin marketplace upgrade roadmap
+```
+
 #### Claude Code
 
 Claude Code에서 다음 명령을 순서대로 입력합니다.
@@ -43,6 +49,13 @@ Claude Code에서 다음 명령을 순서대로 입력합니다.
 ```
 
 설치 후 새 Claude Code 세션에서 `/roadmap`으로 호출합니다.
+
+서드파티 마켓플레이스의 자동 업데이트는 기본적으로 꺼져 있습니다. `/plugin`에서 `roadmap` 마켓플레이스의 자동 업데이트를 켜거나 다음 명령으로 직접 갱신한 뒤, Claude Code가 업데이트를 알리면 `/reload-plugins`를 실행합니다.
+
+```text
+/plugin marketplace update roadmap
+/reload-plugins
+```
 
 ### 대안: GitHub와 `npx skills`
 
@@ -65,6 +78,25 @@ npx skills update roadmap --global
 ```
 
 `skills` CLI는 자체 설치 경로와 잠금 파일을 관리합니다. 같은 도구와 범위에 `/plugin` 설치와 `npx skills` 설치를 함께 사용하지 마세요.
+
+## 버전 관리 및 릴리스
+
+`VERSION`을 플러그인 버전의 단일 기준으로 사용합니다. 매니페스트 버전을 직접 수정하지 마세요. 변경 성격에 맞는 시맨틱 버전 증가 단계를 선택하면 Claude 마켓플레이스 매니페스트와 두 플러그인 매니페스트가 함께 갱신됩니다.
+
+```bash
+./scripts/set-version.sh patch
+./scripts/set-version.sh minor
+./scripts/set-version.sh major
+```
+
+`./scripts/set-version.sh 2.0.0`처럼 명시적인 안정 버전도 지정할 수 있습니다. 개발 검증을 실행하고 관련 스킬 변경과 버전 변경을 함께 커밋한 다음, 해당 커밋에 정확한 버전 태그를 붙여 브랜치와 태그를 푸시합니다.
+
+```bash
+git tag "v$(cat VERSION)"
+git push origin main "v$(cat VERSION)"
+```
+
+릴리스 워크플로는 태그와 `VERSION`이 다르면 배포를 차단하고, 회귀 테스트를 다시 실행한 뒤 GitHub 릴리스를 생성합니다. 설치된 플러그인은 각 클라이언트의 마켓플레이스 갱신 흐름을 통해 증가한 매니페스트 버전을 감지할 수 있습니다.
 
 ### 다른 호환 에이전트에 설치하기
 
@@ -138,6 +170,8 @@ $roadmap 이 저장소를 확인하고 팀 기반 접근 제어 기능을 위한
 ## 프로젝트 구조
 
 ```text
+.github/workflows/
+└── release.yml
 .agents/plugins/
 └── marketplace.json
 .claude-plugin/
@@ -145,6 +179,8 @@ $roadmap 이 저장소를 확인하고 팀 기반 접근 제어 기능을 위한
 └── plugin.json
 .codex-plugin/
 └── plugin.json
+scripts/
+└── set-version.sh
 roadmap/
 ├── SKILL.md
 ├── agents/
@@ -154,8 +190,10 @@ roadmap/
 │   └── session-closeout.md
 └── scripts/
     └── install.sh
+VERSION
 ```
 
+- `.github/workflows/release.yml`은 버전 태그를 검증하고 회귀 테스트를 실행한 뒤 GitHub 릴리스를 생성합니다.
 - `.agents/plugins/marketplace.json`은 Codex에 저장소의 플러그인 목록을 제공합니다.
 - `.claude-plugin/marketplace.json`은 Claude Code에 저장소의 플러그인 목록을 제공합니다.
 - Claude Code와 Codex의 `plugin.json`은 플러그인 메타데이터와 `roadmap/` 스킬 경로를 정의합니다.
@@ -163,7 +201,8 @@ roadmap/
 - `references/roadmap-structure.md`는 지속적인 로드맵 규율, 세션 크기, 순서, 병행 소유권을 정의합니다.
 - `references/session-closeout.md`는 완료 판정과 상세형·축약형 자립형 프롬프트 형식을 정의합니다.
 - `agents/openai.yaml`은 Codex 전용 표시 정보를 제공합니다.
-- `scripts/install.sh`는 기존 복사 설치 사용자를 위한 설치·업데이트 스크립트입니다.
+- `roadmap/scripts/install.sh`는 기존 복사 설치 사용자를 위한 설치·업데이트 스크립트입니다.
+- 루트의 `VERSION` 파일과 `scripts/set-version.sh`는 모든 릴리스 메타데이터를 일치시킵니다.
 
 ## 개발 및 검증
 
@@ -173,7 +212,9 @@ roadmap/
 bash tests/install-roadmap-skill.sh
 bash tests/validate-installation-docs.sh
 bash tests/validate-roadmap-content.sh
+bash tests/version-management.sh
 bash -n roadmap/scripts/install.sh
+bash -n scripts/set-version.sh
 git diff --check
 ```
 
