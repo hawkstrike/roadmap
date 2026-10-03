@@ -39,11 +39,11 @@ Keep the current session in progress or blocked when any of these remain.
 5. Canonical roadmap status, completion evidence, current and next sessions, archive index links, and change history only when the plan itself changed
 6. A copyable self-contained next-session or continuation prompt
 
-Update the roadmap before generating the prompt so the prompt references current state. Preserve both the status emoji and text label defined by the roadmap structure whenever a session status changes. Apply the roadmap's archive policy when a completed phase or track is ready to move out of the active plan, and keep direct archive index links in the canonical roadmap. Update change history only when the plan itself changed; routine completion belongs in completion evidence and the archive. Generate the next self-contained prompt in the format recorded by the roadmap. A completed session advances to the approved next session; an incomplete session keeps the same ID and produces a continuation prompt.
+Update the roadmap before generating the prompt so the prompt references current state. Preserve both the status emoji and text label defined by the roadmap structure whenever a session status changes. At every closeout, refresh the top session and prompt sections so they show the sessions that can start now and their full copyable fenced text prompts. Remove stale launch prompts; if no session can start, state the blocker or completion instead. Move history-only completed sessions into the existing Markdown archive for their phase, including completed sessions in a still-active phase. Verify archived evidence, index links, backlinks, and prerequisite anchors before removing details from the active roadmap. Update change history only when the plan itself changed; routine completion belongs in completion evidence and the archive. Generate the next self-contained prompt in the format recorded by the roadmap. A completed session advances to the approved next session; an incomplete session keeps the same ID and produces a continuation prompt.
 
 ## Required prompt content
 
-Every format must include the working path; applicable instruction and relevant-skill discovery; exact canonical roadmap and relevant guide paths; previous result; current session ID and goal; included and excluded scope; prerequisites and shared boundaries; completion criteria; planned verification; preservation of user-owned changes; completion decision; closeout order; roadmap and archive update responsibility; and a requirement to generate the following self-contained prompt.
+Every format must include the working path; applicable instruction and relevant-skill discovery; exact canonical roadmap and relevant guide paths; previous result; current session ID and goal; included and excluded scope; prerequisites and shared boundaries; completion criteria; planned verification; preservation of user-owned changes; completion decision; closeout order; roadmap and archive update responsibility; and a requirement to generate the following self-contained prompt. Carry the top-placement, phase-reuse, colored-status, and per-phase archive rules into every format.
 
 ## Detailed completed-session prompt
 
@@ -65,6 +65,8 @@ Required verification: {planned verification}
 Before editing, read the relevant implementation, tests, configuration, and similar existing patterns. State material assumptions and tradeoffs. Make the smallest change that satisfies this session; avoid unrelated cleanup, speculative abstraction, and unrelated reformatting. Reproduce bugs before fixing them when practical, test behavior, investigate root causes, and add no dependency without a demonstrated need. Preserve user-owned changes and do not claim completion without fresh verification evidence.
 
 At closeout, update the canonical roadmap's completion evidence and current and next sessions. Apply its archive policy, preserve direct archive index links, and update change history only when the plan itself changed. If every completion criterion passes, mark this session complete and advance to the approved next session. Otherwise keep this session open. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
+
+Maintain the top session and prompt sections with startable sessions and complete fenced text prompts in the recorded format; remove stale prompts and state when none can start. Before adding sessions, inspect existing phases and archives and reuse a related phase; create a new phase only if none fits, preserving approved priorities. Use colored status labels (🟡 Pending, 🔵 In progress, 🔴 Blocked, 🟢 Complete), translated to the document language. Archive history-only completed work in one Markdown file per phase, verify preserved evidence and links before removing details, and keep active work in the roadmap.
 
 Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another invocation of the roadmap skill.
 ```
@@ -93,6 +95,8 @@ Before editing, read the relevant implementation, tests, configuration, and simi
 
 At closeout, update the canonical roadmap's completion evidence and current and next sessions. Apply its archive policy, preserve direct archive index links, and update change history only when the plan itself changed. Advance only if every remaining completion criterion passes; otherwise keep the same session ID. In the final response, report implementation, verification results, commit or Git state, remaining risks, and roadmap changes before the prompt.
 
+Maintain the top session and prompt sections with startable sessions and complete fenced text prompts in the recorded format; remove stale prompts and state when none can start. Before adding sessions, inspect existing phases and archives and reuse a related phase; create a new phase only if none fits, preserving approved priorities. Use colored status labels (🟡 Pending, 🔵 In progress, 🔴 Blocked, 🟢 Complete), translated to the document language. Archive history-only completed work in one Markdown file per phase, verify preserved evidence and links before removing details, and keep active work in the roadmap.
+
 Generate the next self-contained prompt after updating the roadmap. Use the roadmap's selected prompt format and carry forward the same scope, verification, completion, closeout, and prompt-generation rules. Do not require previous conversation history or another invocation of the roadmap skill.
 ```
 
@@ -109,6 +113,8 @@ Excluded: {excluded scope}
 Prerequisites and shared ownership: {prerequisites, shared boundaries, and roadmap update responsibility}
 Completion requires: {completion criteria}
 Verify with: {planned verification}
+
+Maintain the top session and prompt sections with startable sessions and complete fenced text prompts in the recorded format; remove stale prompts and state when none can start. Before adding sessions, inspect existing phases and archives and reuse a related phase; create a new phase only if none fits, preserving approved priorities. Use colored status labels (🟡 Pending, 🔵 In progress, 🔴 Blocked, 🟢 Complete), translated to the document language. Archive history-only completed work in one Markdown file per phase, verify preserved evidence and links before removing details, and keep active work in the roadmap.
 
 Preserve user-owned changes. Mark the session complete only with fresh evidence for every criterion; otherwise keep it open. Update current state and completion evidence, apply the archive policy while preserving direct index links, and record change history only when the plan itself changed. Then report implementation, verification, Git state, risks, and roadmap changes before generating the next self-contained prompt in the recorded format with the same execution, completion, closeout, and prompt-generation rules.
 ```
@@ -129,6 +135,8 @@ Shared ownership: {shared boundaries and roadmap update responsibility}
 Completion requires: {remaining completion criteria}
 Verify with: {remaining planned verification}
 Git and user-owned changes: {Git state and preservation requirements}
+
+Maintain the top session and prompt sections with startable sessions and complete fenced text prompts in the recorded format; remove stale prompts and state when none can start. Before adding sessions, inspect existing phases and archives and reuse a related phase; create a new phase only if none fits, preserving approved priorities. Use colored status labels (🟡 Pending, 🔵 In progress, 🔴 Blocked, 🟢 Complete), translated to the document language. Archive history-only completed work in one Markdown file per phase, verify preserved evidence and links before removing details, and keep active work in the roadmap.
 
 Preserve the same session ID until every criterion has fresh evidence. Update current state and completion evidence, apply the archive policy while preserving direct index links, and record change history only when the plan itself changed. Then report implementation, verification, Git state, risks, and roadmap changes before generating the next self-contained prompt in the recorded format with the same execution, completion, closeout, and prompt-generation rules.
 ```

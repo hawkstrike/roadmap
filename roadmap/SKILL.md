@@ -17,11 +17,11 @@ Inspect current evidence first. For creation or material revision, resolve only 
 4. When documentation and implementation disagree, prefer current files and verification evidence, then record the discrepancy.
 5. When the request is inspection-only, evaluate the roadmap against current evidence, report prioritized findings, and stop. Do not modify the roadmap, seek sequencing or prompt-policy approval, or generate a session prompt unless the user asks for a revision.
 6. For creation or material revision, resolve discovery gaps before drafting the full roadmap. Consider the goal and success criteria, primary users and flows, required and excluded scope, constraints, external dependencies, and release or verification expectations. Ask only the single highest-impact unresolved question, one topic per message, and do not ask for facts available in the inspected evidence.
-7. Read and follow [references/roadmap-structure.md](references/roadmap-structure.md) when creating or revising the roadmap.
+7. Read and follow [references/roadmap-structure.md](references/roadmap-structure.md) when creating or revising the roadmap. Before adding a session, inspect existing phases and linked archives and reuse a related phase; create a new phase only when none fits. Archive history-only completed work in one linked Markdown file per phase.
 8. Delegate design, implementation, testing, and verification methods to applicable project instructions and relevant skills available in the current environment. Self-contained session prompts must not disable those skills.
 9. After scope is clear, propose session sequencing based on dependencies, shared boundaries, uncertainty, user value, and integration needs. Explain material tradeoffs and obtain user approval before locking goals or priorities.
 10. If the canonical roadmap does not already record a prompt policy, ask the user to choose Detailed or compact prompts as one separate topic. Record the choice and keep it until the user explicitly changes it.
-11. Create or revise the canonical roadmap, keep its completed-work archive index navigable, lock the first session, and read [references/session-closeout.md](references/session-closeout.md) to generate the first self-contained prompt. Do not require later prompts to invoke this skill.
+11. Create or revise the canonical roadmap, keep startable sessions and copyable prompts at the top, keep its completed-work archive index navigable, lock the first session, and read [references/session-closeout.md](references/session-closeout.md) to generate the first self-contained prompt. Do not require later prompts to invoke this skill.
 
 ## Instruction precedence
 

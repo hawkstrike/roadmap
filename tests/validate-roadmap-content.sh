@@ -39,13 +39,19 @@ assert_section_contains() {
   local section
 
   section="$(awk -v heading="$heading" '
-    $0 == heading {
+    /^```/ {
+      in_fence = !in_fence
+
+      next
+    }
+
+    !in_fence && $0 == heading {
       in_section = 1
 
       next
     }
 
-    in_section && /^## / {
+    in_section && !in_fence && /^## / {
       exit
     }
 
@@ -82,10 +88,10 @@ assert_contains "$structure_reference" '## Completed work archives'
 assert_contains "$structure_reference" 'link directly to every archive document'
 assert_contains "$structure_reference" 'Group archived sessions by a coherent phase or track'
 assert_contains "$structure_reference" 'Change history records material changes to the plan'
-assert_contains "$structure_reference" '⏳ Pending'
-assert_contains "$structure_reference" '🔄 In progress'
-assert_contains "$structure_reference" '❌ Blocked'
-assert_contains "$structure_reference" '✅ Complete'
+assert_contains "$structure_reference" '🟡 Pending'
+assert_contains "$structure_reference" '🔵 In progress'
+assert_contains "$structure_reference" '🔴 Blocked'
+assert_contains "$structure_reference" '🟢 Complete'
 assert_contains "$structure_reference" 'Planned verification'
 assert_contains "$structure_reference" 'Completion evidence'
 assert_contains "$structure_reference" 'continue to use relevant skills'
@@ -122,7 +128,7 @@ assert_contains "$english_readme" 'You do not need both Claude Code and Codex.'
 assert_contains "$english_readme" '/roadmap'
 assert_contains "$english_readme" 'Agent Skills-compatible'
 assert_contains "$english_readme" 'read-only inspection'
-assert_contains "$english_readme" '`✅ Complete`, `🔄 In progress`, `⏳ Pending`, or `❌ Blocked`'
+assert_contains "$english_readme" '`🟢 Complete`, `🔵 In progress`, `🟡 Pending`, or `🔴 Blocked`'
 assert_contains "$english_readme" 'links directly to every archive document'
 assert_contains "$english_readme" 'material plan changes rather than routine session completion'
 assert_contains "$english_readme" 'Codex development environments'
@@ -135,10 +141,42 @@ assert_contains "$korean_readme" 'Claude Code와 Codex를 모두 설치할 필�
 assert_contains "$korean_readme" '/roadmap'
 assert_contains "$korean_readme" 'Agent Skills 호환'
 assert_contains "$korean_readme" '읽기 전용 점검'
-assert_contains "$korean_readme" '`✅ 완료`, `🔄 진행 중`, `⏳ 대기`, `❌ 차단`'
+assert_contains "$korean_readme" '`🟢 완료`, `🔵 진행 중`, `🟡 대기`, `🔴 차단`'
 assert_contains "$korean_readme" '모든 아카이브 문서로 직접 연결'
 assert_contains "$korean_readme" '일상적인 세션 완료가 아니라 중요한 계획 변경만 기록'
 assert_contains "$korean_readme" 'Codex 개발 환경'
 assert_contains "$korean_readme" 'CODEX_HOME'
+
+# The startable-session area must precede background in the default output layout.
+layout="$(awk '/^# \{Project name\} roadmap$/ { in_layout = 1; next } in_layout && /^```$/ { exit } in_layout && /^## / { print }' "$structure_reference")"
+expected_top="$(printf '%s\n' '## Current and next sessions' '## Copyable session prompts')"
+
+if [[ "$(head -n 2 <<< "$layout")" != "$expected_top" ]]; then
+  echo 'Expected startable sessions and copyable prompts before roadmap background' >&2
+
+  exit 1
+fi
+
+assert_section_contains "$structure_reference" '## Startable sessions and copyable prompts' 'first body sections'
+assert_section_contains "$structure_reference" '## Startable sessions and copyable prompts' 'fenced `text` code block'
+assert_section_contains "$structure_reference" '## Startable sessions and copyable prompts' 'prerequisites are satisfied'
+assert_section_contains "$structure_reference" '## Startable sessions and copyable prompts' 'no session is startable'
+assert_section_contains "$structure_reference" '## Phase placement for new sessions' 'inspect existing phases and their archive index'
+assert_section_contains "$structure_reference" '## Phase placement for new sessions' 'Reuse a related phase'
+assert_section_contains "$structure_reference" '## Phase placement for new sessions' 'only when no existing phase fits'
+assert_section_contains "$structure_reference" '## Active roadmap and archives' 'one Markdown archive file per phase'
+assert_section_contains "$structure_reference" '## Active roadmap and archives' 'Before removing details'
+assert_section_contains "$structure_reference" '## Active roadmap and archives' 'completed sessions from a still-active phase'
+assert_section_contains "$structure_reference" '## Shared execution rules' 'top session and prompt sections'
+assert_contains "$skill_file" 'reuse a related phase'
+
+for heading in '## Detailed completed-session prompt' '## Detailed continuation prompt' '## Compact completed-session prompt' '## Compact continuation prompt'; do
+  assert_section_contains "$closeout_reference" "$heading" 'top session and prompt sections'
+  assert_section_contains "$closeout_reference" "$heading" 'reuse a related phase'
+  assert_section_contains "$closeout_reference" "$heading" '🟡 Pending, 🔵 In progress, 🔴 Blocked, 🟢 Complete'
+done
+
+assert_contains "$english_readme" 'top of the roadmap'
+assert_contains "$korean_readme" '로드맵 상단'
 
 echo 'roadmap content tests passed'
