@@ -131,11 +131,11 @@ Record the selected format, state that it applies to completed-session and conti
 
 Include these fields for every session.
 
-Show every session and phase status with both its colored emoji and text label in summaries, tables, and archives. Use only `🟡 Pending`, `🔵 In progress`, `🔴 Blocked`, or `🟢 Complete`; do not replace the label with an emoji alone. Translate the text label to the document language while keeping the same color mapping: yellow pending, blue in progress, red blocked, green complete. Phase completion requires all its sessions to be complete; show a blocking reason when a required session blocks the phase.
+Show every session and phase status with both its colored emoji and text label in summaries, tables, and archives. Use only `⏳ Pending`, `🔄 In progress`, `❌ Blocked`, or `✅ Complete`; do not replace the label with an emoji alone. Use recognizable symbols rather than plain colored circles: an hourglass for pending, arrows for in progress, a cross for blocked or failed, and a check for complete. Translate the text label to the document language while preserving its emoji. Show a failed verification result as `❌ Failed`; the session remains in progress or blocked until its completion criteria pass. Phase completion requires all its sessions to be complete; show a blocking reason when a required session blocks the phase.
 
 | Field | Content |
 | --- | --- |
-| Status | `🟡 Pending`, `🔵 In progress`, `🔴 Blocked`, or `🟢 Complete` |
+| Status | `⏳ Pending`, `🔄 In progress`, `❌ Blocked`, or `✅ Complete` |
 | ID | A unique identifier that follows project conventions |
 | Track | A sequential or parallel workstream |
 | Goal | One user-facing or technical outcome |
